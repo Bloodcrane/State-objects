@@ -9,7 +9,7 @@
   font-family:monospace;
   box-shadow: 5px 5px 5px 5px rgba(0, 0, 0, 0.151);
   text-shadow: 2px 2px 5px black;
-}
+} /* */
 
 body{
   background-image: url('./Assets/style-Images/noise-dark.png');
@@ -110,7 +110,6 @@ button {
   cursor: pointer;
 }
 
-/* Animations */
 @keyframes slide-in-right {
   from {
     transform: translateX(100%);
