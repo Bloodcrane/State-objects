@@ -1,7 +1,7 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import './App.css';
 
-function Task({ task, onComplete, onDelete }) {
+const Task = React.memo(({ task, onComplete, onDelete }) => {
   console.log(`Rendering Task: ${task}`);
   
   return (
@@ -11,25 +11,23 @@ function Task({ task, onComplete, onDelete }) {
       <button onClick={onDelete}>Delete</button>
     </li>
   );
-}
-
-const MemoizedTask = React.memo(Task);
+});
 
 function App() {
   const [newTask, setNewTask] = useState('');
   const [todoList, setTodoList] = useState([]);
   const [completedList, setCompletedList] = useState([]);
 
-  const handleInputChange = (event) => {
+  const handleInputChange = useCallback((event) => {
     setNewTask(event.target.value);
-  };
+  }, []);
 
-  const addTask = () => {
+  const addTask = useCallback(() => {
     if (newTask.trim() !== '') {
       setTodoList(prevList => [...prevList, newTask]);
       setNewTask('');
     }
-  };
+  }, [newTask]);
 
   const deleteTask = useCallback((index, isCompleted) => {
     if (isCompleted) {
@@ -45,6 +43,24 @@ function App() {
     setCompletedList(prevList => [...prevList, task]);
   }, [todoList]);
 
+  const memoizedTodoList = useMemo(() => todoList.map((task, index) => (
+    <Task
+      key={index}
+      task={task}
+      onComplete={() => completeTask(index)}
+      onDelete={() => deleteTask(index, false)}
+    />
+  )), [todoList, completeTask, deleteTask]);
+
+  const memoizedCompletedList = useMemo(() => completedList.map((task, index) => (
+    <Task
+      key={index}
+      task={task}
+      onComplete={() => deleteTask(index, true)}
+      onDelete={() => deleteTask(index, true)}
+    />
+  )), [completedList, deleteTask]);
+
   return (
     <div className="App">
       <div className="column">
@@ -57,27 +73,13 @@ function App() {
         />
         <button onClick={addTask}>Add Task</button>
         <ul>
-          {todoList.map((task, index) => (
-            <MemoizedTask
-              key={index}
-              task={task}
-              onComplete={() => completeTask(index)}
-              onDelete={() => deleteTask(index, false)}
-            />
-          ))}
+          {memoizedTodoList}
         </ul>
       </div>
       <div className="column">
         <h2>Completed</h2>
         <ul>
-          {completedList.map((task, index) => (
-            <MemoizedTask
-              key={index}
-              task={task}
-              onComplete={() => deleteTask(index, true)}
-              onDelete={() => deleteTask(index, true)}
-            />
-          ))}
+          {memoizedCompletedList}
         </ul>
       </div>
     </div>
