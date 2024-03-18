@@ -18,7 +18,7 @@ body{
   font-family:monospace;
 }
 
-.column {
+.columnTodo {
   width: 45%;
   padding: 20px;
   border-radius: 10px;
@@ -26,7 +26,29 @@ body{
   transition: background-color 0.3s ease;
   border: 2px solid;
   border-color: #000000;
-  background-image: url('./Assets/style-Images/noise-light.png'), linear-gradient(to top, #e0e0e0, #818181);
+  background-image: url('./Assets/style-Images/noise-light.png'), linear-gradient(to top, #e0e0e0, #a05954);
+}
+
+.columnInprogress {
+  width: 45%;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.3s ease;
+  border: 2px solid;
+  border-color: #000000;
+  background-image: url('./Assets/style-Images/noise-light.png'), linear-gradient(to top, #e0e0e0, #dfa55a);
+}
+
+.columnCompleted {
+  width: 45%;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.3s ease;
+  border: 2px solid;
+  border-color: #000000;
+  background-image: url('./Assets/style-Images/noise-light.png'), linear-gradient(to top, #e0e0e0, #76be5a);
 }
 
 .column h2 {
@@ -42,7 +64,7 @@ input[type="text"] {
   color: #0e0e0e;
   border: 2px solid;
   border-color: #000000;
-  background-image: url('./Assets/style-Images/noise-dark.png'), linear-gradient(to top, #c5c5c5, #b4b4b4);
+  background-image: url('./Assets/style-Images/noise-dark.png'), linear-gradient(to top, #c5c5c571, #b4b4b45b);
 }
 
 input[type="text"]::placeholder {
@@ -61,7 +83,7 @@ button {
   box-shadow: 8px 8px 8px rgba(0, 0, 0, 0.589);
   text-decoration: none;
   color: #000000;
-  background-image: url('./Assets/style-Images/noise-dark.png'), linear-gradient(to top, #ebebee, #f1f1f1);
+  background-image: url('./Assets/style-Images/noise-dark.png'), linear-gradient(to top, #c3c3f7, #f1f1f1);
   border: 2px solid;
   border-color: #dbdbdb;
   border-radius: 5px; 
@@ -71,11 +93,11 @@ button {
 button:hover {
   border-color: #000000; 
   box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.658);
-  background-image: url('./Assets/style-Images/noise-dark.png'), linear-gradient(to bottom, #cfcfcf, #cfcfcf);
+  background-image: url('./Assets/style-Images/noise-dark.png'), linear-gradient(to bottom, #ffb8b8, #cfcfcf);
 }
 
 button:active {
-  background-image: url('./Assets/style-Images/noise-light.png'), linear-gradient(to bottom, #9c9c9c, #c5c5c5);
+  background-image: url('./Assets/style-Images/noise-light.png'), linear-gradient(to bottom, #fab6fa, #c5c5c5);
   transform: translateY(2px); 
   color: #000000a6;
   box-shadow: 0px 0px 0px rgba(0, 0, 0, 0);

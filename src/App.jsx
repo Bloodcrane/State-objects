@@ -1,69 +1,47 @@
-import React, { useState, useCallback, useMemo } from 'react';
+import React, { useState } from 'react';
 import './App.css';
-
-const Task = React.memo(({ task, onComplete, onDelete }) => {
-  console.log(`Rendering Task: ${task}`);
-  
-  return (
-    <li>
-      {task}
-      <button onClick={onComplete}>Finish</button>
-      <button onClick={onDelete}>Delete</button>
-    </li>
-  );
-});
 
 function App() {
   const [newTask, setNewTask] = useState('');
   const [todoList, setTodoList] = useState([]);
+  const [inProgressList, setInProgressList] = useState([]);
   const [completedList, setCompletedList] = useState([]);
 
-  const handleInputChange = useCallback((event) => {
+  const handleInputChange = (event) => {
     setNewTask(event.target.value);
-  }, []);
+  };
 
-  const addTask = useCallback(() => {
+  const addTask = () => {
     if (newTask.trim() !== '') {
-      setTodoList(prevList => [...prevList, newTask]);
+      setTodoList([...todoList, newTask]);
       setNewTask('');
     }
-  }, [newTask]);
+  };
 
-  const deleteTask = useCallback((index, isCompleted) => {
-    if (isCompleted) {
-      setCompletedList(prevList => prevList.filter((_, i) => i !== index));
-    } else {
-      setTodoList(prevList => prevList.filter((_, i) => i !== index));
-    }
-  }, []);
-
-  const completeTask = useCallback((index) => {
+  const moveToInProgress = (index) => {
     const task = todoList[index];
-    setTodoList(prevList => prevList.filter((_, i) => i !== index));
-    setCompletedList(prevList => [...prevList, task]);
-  }, [todoList]);
+    const updatedTodoList = todoList.filter((_, i) => i !== index);
+    setTodoList(updatedTodoList);
+    setInProgressList([...inProgressList, task]);
+  };
 
-  const memoizedTodoList = useMemo(() => todoList.map((task, index) => (
-    <Task
-      key={index}
-      task={task}
-      onComplete={() => completeTask(index)}
-      onDelete={() => deleteTask(index, false)}
-    />
-  )), [todoList, completeTask, deleteTask]);
+  const moveToToDo = (index) => {
+    const task = inProgressList[index];
+    const updatedInProgressList = inProgressList.filter((_, i) => i !== index);
+    setInProgressList(updatedInProgressList);
+    setTodoList([...todoList, task]);
+  };
 
-  const memoizedCompletedList = useMemo(() => completedList.map((task, index) => (
-    <Task
-      key={index}
-      task={task}
-      onComplete={() => deleteTask(index, true)}
-      onDelete={() => deleteTask(index, true)}
-    />
-  )), [completedList, deleteTask]);
+  const completeTask = (index) => {
+    const task = inProgressList[index];
+    const updatedInProgressList = inProgressList.filter((_, i) => i !== index);
+    setInProgressList(updatedInProgressList);
+    setCompletedList([...completedList, task]);
+  };
 
   return (
     <div className="App">
-      <div className="column">
+      <div className="columnTodo">
         <h2>To-Do</h2>
         <input
           type="text"
@@ -73,13 +51,35 @@ function App() {
         />
         <button onClick={addTask}>Add Task</button>
         <ul>
-          {memoizedTodoList}
+          {todoList.map((task, index) => (
+            <li key={index}>
+              {task}
+              <button onClick={() => moveToInProgress(index)}>Move to In Progress</button>
+            </li>
+          ))}
         </ul>
       </div>
-      <div className="column">
+      <div className="columnInprogress">
+        
+        <h2>In Progress</h2>
+        <ul>
+          {inProgressList.map((task, index) => (
+            <li key={index}>
+              {task}
+              <button onClick={() => moveToToDo(index)}>Move to To-Do</button>
+              <button onClick={() => completeTask(index)}>Complete</button>
+            </li>
+          ))}
+        </ul>
+      </div>
+      <div className="columnCompleted">
         <h2>Completed</h2>
         <ul>
-          {memoizedCompletedList}
+          {completedList.map((task, index) => (
+            <li key={index}>
+              {task}
+            </li>
+          ))}
         </ul>
       </div>
     </div>
